@@ -7,7 +7,9 @@ dotenv.config();
 const client = new discord.Client({
     intents: [
         "GUILDS",
-        "GUILD_MESSAGES"
+        "GUILD_MESSAGES",
+        "DIRECT_MESSAGES",
+        "GUILD_VOICE_STATES"
     ],
     partials: [
         "CHANNEL"
