@@ -30,9 +30,16 @@ export default {
             return;
         }
 
+        interaction.deferReply();
+
         const results = await youtube.search(searchFor);
 
-        interaction.reply(`Playing https://www.youtube.com/watch?v=${results.videos[0].id}`);
+        if(!results.videos.length) {
+            interaction.editReply("No videos found");
+            return;
+        }
+
+        interaction.editReply(`Playing https://www.youtube.com/watch?v=${results.videos[0].id}`);
 
         const video = ytdl("https://www.youtube.com/watch?v=" + results.videos[0].id, {
             filter: "audioonly",
@@ -43,9 +50,7 @@ export default {
         getVoiceConnection(interaction.guild.id).subscribe(player);
         player.play(resource);
 
-        player.on('error', error => {
-            console.error(`Error: ${error.message} with resource ${error.resource.metadata.title}`);
-        });
+        player.on('error', console.error);
         player.on(AudioPlayerStatus.Playing, () => {
             console.log('The audio player has started playing!');
         });
@@ -53,7 +58,7 @@ export default {
             console.log('The audio player has been paused');
         });
         player.on(AudioPlayerStatus.AutoPaused, () => {
-            console.log('The audio player has been paused');
+            console.log('The audio player has been auto-paused');
         });
         player.on(AudioPlayerStatus.Idle, () => {
             console.log("Idle");
@@ -76,20 +81,23 @@ export default {
 
         const results = await youtube.search(searchFor);
 
+        if(!results.videos.length) {
+            msg.channel.send("No videos found");
+            return;
+        }
+
         msg.channel.send(`Playing https://www.youtube.com/watch?v=${results.videos[0].id}`);
 
         const video = ytdl("https://www.youtube.com/watch?v=" + results.videos[0].id, {
             filter: "audioonly",
         });
-        const player = createAudioPlayer();
+        const player = connection._state.subscription.player || createAudioPlayer();
         const resource = createAudioResource(video);
 
         getVoiceConnection(msg.guild.id).subscribe(player);
         player.play(resource);
 
-        player.on('error', error => {
-            console.error(`Error: ${error.message} with resource ${error.resource.metadata.title}`);
-        });
+        player.on('error', console.error);
         player.on(AudioPlayerStatus.Playing, () => {
             console.log('The audio player has started playing!');
         });
@@ -97,7 +105,7 @@ export default {
             console.log('The audio player has been paused');
         });
         player.on(AudioPlayerStatus.AutoPaused, () => {
-            console.log('The audio player has been paused');
+            console.log('The audio player has been auto-paused');
         });
         player.on(AudioPlayerStatus.Idle, () => {
             console.log("Idle");
