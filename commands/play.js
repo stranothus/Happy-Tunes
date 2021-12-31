@@ -47,7 +47,7 @@ export default {
         const player = createAudioPlayer();
         const resource = createAudioResource(video);
 
-        getVoiceConnection(interaction.guild.id).subscribe(player);
+        connection(interaction.guild.id).subscribe(player);
         player.play(resource);
 
         player.on('error', console.error);
