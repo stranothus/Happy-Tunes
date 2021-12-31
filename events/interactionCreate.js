@@ -2,6 +2,17 @@ export default {
     type: "on",
     name: "interactionCreate",
     execute: interaction => {
+		if(interaction.isSelectMenu()) {
+			if(interaction.user.bot) return;
+
+			const command = interaction.client.commands.get(interaction.message.interaction.commandName);
+
+			if(!command) return;
+
+			command.selectMenu(interaction);
+			
+			return;
+		}
         if (!interaction.isCommand()) return;
     
         const command = interaction.client.commands.get(interaction.commandName);
