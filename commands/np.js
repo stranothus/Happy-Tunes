@@ -1,5 +1,8 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { getVoiceConnection } from '@discordjs/voice';
+import InnerTube from "youtubei.js";
+
+const youtube = await new InnerTube();
 
 export default {
 	data: new SlashCommandBuilder()
@@ -14,14 +17,14 @@ export default {
 			return;
 		}
 
-		const song = interaction.client.servers[interaction.guild.id][0];
-
-		if(!song) {
+		if(!interaction.client.servers[interaction.guild.id][0]) {
 			interaction.reply("No songs currently playing");
 			return;
 		}
 
-		interaction.reply(`Now playing [${song.title}](${song.url}) by [${song.author}](<${song.channel_url}>)`);
+		const song = await youtube.getDetails(interaction.client.servers[interaction.guild.id][0]);
+
+		interaction.reply(`Now playing [${song.title}](https://www.youtube.com/watch?v=${song.id}) by [${song.metadata.channel_name}](<${song.metadata.channel_url}>)`);
 	},
 	executeText: async function(msg, args) {
 		const connection = getVoiceConnection(msg.guild.id);
@@ -31,13 +34,13 @@ export default {
 			return;
 		}
 
-		const song = msg.client.servers[msg.guild.id][0];
-
-		if(!song) {
+		if(!msg.client.servers[msg.guild.id][0]) {
 			msg.channel.send("No songs currently playing");
 			return;
 		}
 
-		msg.channel.send(`Now playing [${song.title}](${song.url}) by [${song.author}](<${song.channel_url}>)`);
+		const song = await youtube.getDetails(msg.client.servers[msg.guild.id][0]);
+
+		msg.channel.send(`Now playing [${song.title}](https://www.youtube.com/watch?v=${song.id}) by [${song.metadata.channel_name}](<${song.metadata.channel_url}>)`);
 	}
 }

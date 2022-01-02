@@ -38,16 +38,16 @@ export default {
 			interaction.editReply("No videos found");
 			return;
 		}
-
-		if(interaction.client.servers[interaction.guild.id]) {
-			interaction.client.servers[interaction.guild.id].push(results.videos[0]);
+		
+		if(interaction.client.servers[interaction.guild.id] && interaction.client.servers[interaction.guild.id].length) {
+			interaction.client.servers[interaction.guild.id].push(results.videos[0].id);
 			interaction.editReply(`Queued https://www.youtube.com/watch?v=${results.videos[0].id}`);
 			return;
 		}
 
 		interaction.editReply(`Playing https://www.youtube.com/watch?v=${results.videos[0].id}`);
 
-		interaction.client.servers[interaction.guild.id] = [results.videos[0]];
+		interaction.client.servers[interaction.guild.id] = [results.videos[0].id];
 
 		const video = ytdl("https://www.youtube.com/watch?v=" + results.videos[0].id, {
 			filter: "audioonly",
@@ -67,8 +67,8 @@ export default {
 			const songs = interaction.client.servers[interaction.guild.id];
 
 			if(songs.length) {
-				interaction.channel.send(`Playing https://www.youtube.com/watch?v=${songs[0].id}`);
-				const video = ytdl("https://www.youtube.com/watch?v=" + songs[0].id, {
+				interaction.channel.send(`Playing https://www.youtube.com/watch?v=${songs[0]}`);
+				const video = ytdl("https://www.youtube.com/watch?v=" + songs[0], {
 					filter: "audioonly",
 				});
 				const resource = createAudioResource(video);
@@ -99,20 +99,20 @@ export default {
 			return;
 		}
 
-		if(msg.client.servers[msg.guild.id]) {
-			msg.client.servers[msg.guild.id].push(results.videos[0]);
+		if(msg.client.servers[msg.guild.id] && msg.client.servers[msg.guild.id].length) {
+			msg.client.servers[msg.guild.id].push(results.videos[0].id);
 			msg.channel.send(`Queued https://www.youtube.com/watch?v=${results.videos[0].id}`);
 			return;
 		}
 
 		msg.channel.send(`Playing https://www.youtube.com/watch?v=${results.videos[0].id}`);
 
-		msg.client.servers[msg.guild.id] = [results.videos[0]];
+		msg.client.servers[msg.guild.id] = [results.videos[0].id];
 
 		const video = ytdl("https://www.youtube.com/watch?v=" + results.videos[0].id, {
 			filter: "audioonly",
 		});
-		const player = connection._state.subscription.player || createAudioPlayer();
+		const player = createAudioPlayer();
 		const resource = createAudioResource(video);
 
 		connection.subscribe(player);
@@ -127,8 +127,8 @@ export default {
 			const songs = msg.client.servers[msg.guild.id];
 
 			if(songs.length) {
-				msg.channel.send(`Playing https://www.youtube.com/watch?v=${songs[0].id}`);
-				const video = ytdl("https://www.youtube.com/watch?v=" + songs[0].id, {
+				msg.channel.send(`Playing https://www.youtube.com/watch?v=${songs[0]}`);
+				const video = ytdl("https://www.youtube.com/watch?v=" + songs[0], {
 					filter: "audioonly",
 				});
 				const resource = createAudioResource(video);

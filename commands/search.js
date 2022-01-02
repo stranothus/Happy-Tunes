@@ -120,17 +120,16 @@ export default {
 		interaction.update({ content: 'A song was selected!', components: [], embeds: [] });
 
 		const key = interaction.values[0];
-		const results = await youtube.getDetails(key);
 
-		if(interaction.client.servers[interaction.guild.id]) {
-			interaction.client.servers[interaction.guild.id].push(results);
+		if(interaction.client.servers[interaction.guild.id] && interaction.client.servers[interaction.guild.id].length) {
+			interaction.client.servers[interaction.guild.id].push(key);
 			interaction.channel.send(`Queued https://www.youtube.com/watch?v=${key}`);
 			return;
 		}
 
 		interaction.channel.send(`Playing https://www.youtube.com/watch?v=${key}`);
 
-		interaction.client.servers[interaction.guild.id] = [results];
+		interaction.client.servers[interaction.guild.id] = [key];
 
 		const video = ytdl("https://www.youtube.com/watch?v=" + key, {
 			filter: "audioonly",
@@ -150,8 +149,8 @@ export default {
 			const songs = interaction.client.servers[interaction.guild.id];
 
 			if(songs.length) {
-				interaction.channel.send(`Playing https://www.youtube.com/watch?v=${songs[0].id}`);
-				const video = ytdl("https://www.youtube.com/watch?v=" + songs[0].id, {
+				interaction.channel.send(`Playing https://www.youtube.com/watch?v=${songs[0]}`);
+				const video = ytdl("https://www.youtube.com/watch?v=" + songs[0], {
 					filter: "audioonly",
 				});
 				const resource = createAudioResource(video);
