@@ -123,10 +123,12 @@ export default {
         player.on(AudioPlayerStatus.Idle, () => {
             console.log("Idle");
 			msg.client.servers[msg.guild.id].shift();
+			
+			const songs = msg.client.servers[msg.guild.id];
 
-			if(msg.client.servers[msg.guild.id].length) {
+			if(songs.length) {
 				msg.channel.send(`Playing https://www.youtube.com/watch?v=${songs[0].id}`);
-				const video = ytdl("https://www.youtube.com/watch?v=" + msg.client.servers[msg.guild.id][0].id, {
+				const video = ytdl("https://www.youtube.com/watch?v=" + songs[0].id, {
 					filter: "audioonly",
 				});
 				const resource = createAudioResource(video);

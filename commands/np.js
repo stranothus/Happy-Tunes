@@ -35,6 +35,7 @@ export default {
 
 		if(!song) {
 			msg.channel.send("No songs currently playing");
+			return;
 		}
 
         msg.channel.send(`Now playing [${song.title}](${song.url}) by [${song.author}](<${song.channel_url}>)`);
