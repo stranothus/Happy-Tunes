@@ -5,25 +5,25 @@ import dirFlat from "./utils/dirFlat.js";
 dotenv.config();
 
 const client = new discord.Client({
-    intents: [
-        "GUILDS",
-        "GUILD_MESSAGES",
-        "DIRECT_MESSAGES",
-        "GUILD_VOICE_STATES"
-    ],
-    partials: [
-        "CHANNEL"
-    ]
+	intents: [
+		"GUILDS",
+		"GUILD_MESSAGES",
+		"DIRECT_MESSAGES",
+		"GUILD_VOICE_STATES"
+	],
+	partials: [
+		"CHANNEL"
+	]
 });
 
 Promise.all(dirFlat("./events").map(async v => {
-    let imported = await import("./" + v);
+	let imported = await import("./" + v);
 
-    return {
-        command: v.replace(/\.[^\.]+$/, ""),
-        file: v,
-        ...imported.default
-    };
+	return {
+		command: v.replace(/\.[^\.]+$/, ""),
+		file: v,
+		...imported.default
+	};
 })).then(events => events.forEach(event => client[event.type](event.name, event.execute)));
 
 client.login(process.env.TOKEN);

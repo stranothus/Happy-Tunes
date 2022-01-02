@@ -7,38 +7,38 @@ import ytdl from "ytdl-core";
 const youtube = await new Innertube();
 
 export default {
-    data: new SlashCommandBuilder()
-        .setName("search")
-        .setDescription("Search for music to play")
-        .addStringOption(option => option
-            .setName("search")
-            .setDescription("The music to search for")
-            .setRequired(true)
-        ),
-    DMs: false,
-    execute: async function(interaction) {
-    	const connection = getVoiceConnection(interaction.guild.id);
+	data: new SlashCommandBuilder()
+		.setName("search")
+		.setDescription("Search for music to play")
+		.addStringOption(option => option
+			.setName("search")
+			.setDescription("The music to search for")
+			.setRequired(true)
+		),
+	DMs: false,
+	execute: async function(interaction) {
+		const connection = getVoiceConnection(interaction.guild.id);
 
-        if(!connection) {
-            interaction.reply("Not connected to any voice chat");
-            return;
-        }
+		if(!connection) {
+			interaction.reply("Not connected to any voice chat");
+			return;
+		}
 
-        const searchFor = interaction.options.getString("search");
+		const searchFor = interaction.options.getString("search");
 
-        if(!searchFor) {
-            interaction.reply("No search criteria provided");
-            return;
-        }
+		if(!searchFor) {
+			interaction.reply("No search criteria provided");
+			return;
+		}
 
-        interaction.deferReply();
+		interaction.deferReply();
 
-        const results = await youtube.search(searchFor);
+		const results = await youtube.search(searchFor);
 
-        if(!results.videos.length) {
-            interaction.editReply("No videos found");
-            return;
-        }
+		if(!results.videos.length) {
+			interaction.editReply("No videos found");
+			return;
+		}
 
 		const row = new MessageActionRow()
 			.addComponents(
@@ -52,7 +52,7 @@ export default {
 					}))),
 			);
 
-        interaction.editReply({
+		interaction.editReply({
 			content: `**Search results for** *${searchFor}*`,
 			embeds: results.videos.slice(0, 10).map(v => 
 				new MessageEmbed()
@@ -64,30 +64,30 @@ export default {
 			),
 			components: [row]
 		});
-    },
-    executeText: async function(msg, args) {
-        const connection = getVoiceConnection(msg.guild.id);
+	},
+	executeText: async function(msg, args) {
+		const connection = getVoiceConnection(msg.guild.id);
 
-        if(!connection) {
-            msg.channel.send("Not connected to any voice chat");
-            return;
-        }
+		if(!connection) {
+			msg.channel.send("Not connected to any voice chat");
+			return;
+		}
 
-        const searchFor = interaction.options.getString("search");
+		const searchFor = interaction.options.getString("search");
 
-        if(!searchFor) {
-            msg.channel.send("No search criteria provided");
-            return;
-        }
+		if(!searchFor) {
+			msg.channel.send("No search criteria provided");
+			return;
+		}
 
-        const results = await youtube.search(searchFor);
+		const results = await youtube.search(searchFor);
 
-        if(!results.videos.length) {
-            msg.channel.send("No videos found");
-            return;
-        }
+		if(!results.videos.length) {
+			msg.channel.send("No videos found");
+			return;
+		}
 
-        const row = new MessageActionRow()
+		const row = new MessageActionRow()
 			.addComponents(
 				new MessageSelectMenu()
 					.setCustomId('select')
@@ -99,7 +99,7 @@ export default {
 					}))),
 			);
 
-        msg.channel.send({
+		msg.channel.send({
 			content: `**Search results for** *${searchFor}*`,
 			embeds: results.videos.slice(0, 10).map(v => 
 				new MessageEmbed()
@@ -111,7 +111,7 @@ export default {
 			),
 			components: [row]
 		});
-    },
+	},
 	selectMenu: async function(interaction) {
 		const connnection = getVoiceConnection(interaction.guild.id);
 
@@ -128,23 +128,23 @@ export default {
 			return;
 		}
 
-        interaction.channel.send(`Playing https://www.youtube.com/watch?v=${key}`);
+		interaction.channel.send(`Playing https://www.youtube.com/watch?v=${key}`);
 
 		interaction.client.servers[interaction.guild.id] = [results];
 
 		const video = ytdl("https://www.youtube.com/watch?v=" + key, {
-            filter: "audioonly",
-        });
-        const player = createAudioPlayer();
-        const resource = createAudioResource(video);
+			filter: "audioonly",
+		});
+		const player = createAudioPlayer();
+		const resource = createAudioResource(video);
 
-        connnection.subscribe(player);
-        player.play(resource);
+		connnection.subscribe(player);
+		player.play(resource);
 
-        player.on('error', console.error);
+		player.on('error', console.error);
 
-        player.on(AudioPlayerStatus.Idle, () => {
-            console.log("Idle");
+		player.on(AudioPlayerStatus.Idle, () => {
+			console.log("Idle");
 			interaction.client.servers[interaction.guild.id].shift();
 
 			const songs = interaction.client.servers[interaction.guild.id];
@@ -158,6 +158,6 @@ export default {
 
 				player.play(resource);
 			}
-        });
+		});
 	}
 }
