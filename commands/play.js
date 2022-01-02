@@ -39,7 +39,15 @@ export default {
             return;
         }
 
+		if(interaction.client.servers[interaction.guild.id]) {
+			interaction.client.servers[interaction.guild.id].push(results.videos[0]);
+			interaction.editReply(`Queued https://www.youtube.com/watch?v=${results.videos[0].id}`);
+			return;
+		}
+
         interaction.editReply(`Playing https://www.youtube.com/watch?v=${results.videos[0].id}`);
+
+		interaction.client.servers[interaction.guild.id] = [results.videos[0]];
 
         const video = ytdl("https://www.youtube.com/watch?v=" + results.videos[0].id, {
             filter: "audioonly",
@@ -47,21 +55,26 @@ export default {
         const player = createAudioPlayer();
         const resource = createAudioResource(video);
 
-        connection(interaction.guild.id).subscribe(player);
+        connection.subscribe(player);
         player.play(resource);
 
         player.on('error', console.error);
-        player.on(AudioPlayerStatus.Playing, () => {
-            console.log('The audio player has started playing!');
-        });
-        player.on(AudioPlayerStatus.Paused, () => {
-            console.log('The audio player has been paused');
-        });
-        player.on(AudioPlayerStatus.AutoPaused, () => {
-            console.log('The audio player has been auto-paused');
-        });
+
         player.on(AudioPlayerStatus.Idle, () => {
             console.log("Idle");
+			interaction.client.servers[interaction.guild.id].shift();
+
+			const songs = interaction.client.servers[interaction.guild.id];
+
+			if(songs.length) {
+				interaction.channel.send(`Playing https://www.youtube.com/watch?v=${songs[0].id}`);
+				const video = ytdl("https://www.youtube.com/watch?v=" + songs[0].id, {
+					filter: "audioonly",
+				});
+				const resource = createAudioResource(video);
+
+				player.play(resource);
+			}
         });
     },
     executeText: async function(msg, args) {
@@ -86,7 +99,15 @@ export default {
             return;
         }
 
+		if(msg.client.servers[msg.guild.id]) {
+			msg.client.servers[msg.guild.id].push(results.videos[0]);
+			msg.channel.send(`Queued https://www.youtube.com/watch?v=${results.videos[0].id}`);
+			return;
+		}
+
         msg.channel.send(`Playing https://www.youtube.com/watch?v=${results.videos[0].id}`);
+
+		msg.client.servers[msg.guild.id] = [results.videos[0]];
 
         const video = ytdl("https://www.youtube.com/watch?v=" + results.videos[0].id, {
             filter: "audioonly",
@@ -94,21 +115,24 @@ export default {
         const player = connection._state.subscription.player || createAudioPlayer();
         const resource = createAudioResource(video);
 
-        getVoiceConnection(msg.guild.id).subscribe(player);
+        connection.subscribe(player);
         player.play(resource);
 
         player.on('error', console.error);
-        player.on(AudioPlayerStatus.Playing, () => {
-            console.log('The audio player has started playing!');
-        });
-        player.on(AudioPlayerStatus.Paused, () => {
-            console.log('The audio player has been paused');
-        });
-        player.on(AudioPlayerStatus.AutoPaused, () => {
-            console.log('The audio player has been auto-paused');
-        });
+
         player.on(AudioPlayerStatus.Idle, () => {
             console.log("Idle");
+			msg.client.servers[msg.guild.id].shift();
+
+			if(msg.client.servers[msg.guild.id].length) {
+				msg.channel.send(`Playing https://www.youtube.com/watch?v=${songs[0].id}`);
+				const video = ytdl("https://www.youtube.com/watch?v=" + msg.client.servers[msg.guild.id][0].id, {
+					filter: "audioonly",
+				});
+				const resource = createAudioResource(video);
+
+				player.play(resource);
+			}
         });
     }
 }

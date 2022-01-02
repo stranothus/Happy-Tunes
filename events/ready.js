@@ -10,6 +10,7 @@ export default {
         console.log("Logged in as " + client.user.tag);
 
         client.commands = new discord.Collection();
+		client.servers = {};
         
         Promise.all(dirFlat("./commands").map(async v => {
             let imported = await import("../" + v);
