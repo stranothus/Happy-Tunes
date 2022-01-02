@@ -143,7 +143,6 @@ export default {
 		player.on('error', console.error);
 
 		player.on(AudioPlayerStatus.Idle, () => {
-			console.log("Idle");
 			interaction.client.servers[interaction.guild.id].shift();
 
 			const songs = interaction.client.servers[interaction.guild.id];

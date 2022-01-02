@@ -61,7 +61,6 @@ export default {
 		player.on('error', console.error);
 
 		player.on(AudioPlayerStatus.Idle, () => {
-			console.log("Idle");
 			interaction.client.servers[interaction.guild.id].shift();
 
 			const songs = interaction.client.servers[interaction.guild.id];
@@ -121,7 +120,6 @@ export default {
 		player.on('error', console.error);
 
 		player.on(AudioPlayerStatus.Idle, () => {
-			console.log("Idle");
 			msg.client.servers[msg.guild.id].shift();
 			
 			const songs = msg.client.servers[msg.guild.id];
