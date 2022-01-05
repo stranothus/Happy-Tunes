@@ -28,9 +28,13 @@ export default {
 		const embed = new MessageEmbed()
 			.setTitle(`The Queue`)
 			.setDescription((await Promise.all(songs.map(async (id, i) => {
-				const details = await youtube.getDetails(id);
-				
-				return `${i || "Currently playing.."}. [${details.title}](<https://www.youtube.com/watch?v=${id}>)`;
+				try {
+					const details = await youtube.getDetails(id);
+					
+					return `${i || "Currently playing.."}. [${details.title}](<https://www.youtube.com/watch?v=${id}>)`;
+				} catch (e) {
+					return `${i || "Currently playing.."}. <https://www.youtube.com/watch?v=${id}>`;
+				}
 			}))).join("\n"));
 
 		interaction.reply({ embeds: [embed] });
@@ -53,9 +57,13 @@ export default {
 		const embed = new MessageEmbed()
 			.setTitle(`The Queue`)
 			.setDescription((await Promise.all(songs.map(async (id, i) => {
-				const details = await youtube.getDetails(id);
-				
-				return `${i || "Currently playing.."}. [${details.title}](<https://www.youtube.com/watch?v=${id}>)`;
+				try {
+					const details = await youtube.getDetails(id);
+					
+					return `${i || "Currently playing.."}. [${details.title}](<https://www.youtube.com/watch?v=${id}>)`;
+				} catch (e) {
+					return `${i || "Currently playing.."}. <https://www.youtube.com/watch?v=${id}>`;
+				}
 			}))).join("\n"));
 
 		msg.channel.send({ embeds: [embed] });
