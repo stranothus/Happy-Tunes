@@ -35,7 +35,7 @@ export default {
 		const oldSong = songs[0];
 		const newSong = skipTo >= songs.length ? undefined : songs[skipTo];
 
-		for(let i = skipTo; i < skipTo && interaction.client.servers[interaction.guild.id].length; i++) {
+		for(let i = 0; i < skipTo && interaction.client.servers[interaction.guild.id].length; i++) {
 			interaction.client.servers[interaction.guild.id].shift();
 		}
 
@@ -74,7 +74,7 @@ export default {
 		const oldSong = songs[0];
 		const newSong = skipTo >= songs.length ? undefined : songs[skipTo];
 
-		for(let i = skipTo; i < skipTo && msg.client.servers[msg.guild.id].length; i++) {
+		for(let i = 0; i < skipTo && msg.client.servers[msg.guild.id].length; i++) {
 			msg.client.servers[msg.guild.id].shift();
 		}
 

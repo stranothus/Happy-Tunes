@@ -17,7 +17,9 @@
     "@discordjs/rest": "^0.1.0-canary.0",
     "@discordjs/voice": "^0.7.5",
     "discord.js": "^13.3.1",
+    "dom-parser": "^0.1.6",
     "dotenv": "^10.0.0",
+    "node-fetch": "^3.1.0",
     "sodium": "^3.0.2",
     "youtubei.js": "^1.2.8-npm",
     "ytdl-core": "^4.9.2"
