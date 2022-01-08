@@ -27,14 +27,18 @@ export default {
 
 		const played = Math.floor(connection._state.subscription.player._state.playbackDuration / 1000);
 		const totalDuration = +song.metadata.length_seconds;
-		const playBar = "\u2588".repeat(Math.floor(played / totalDuration * 25) || 1) + "\u2591".repeat(25 - Math.floor(played / totalDuration * 25) || 1);
+		const playBar = "\u2588".repeat(Math.floor(played / totalDuration * 20) || 1) + "\u2591".repeat(20 - Math.floor(played / totalDuration * 20) || 1);
+
+		const playedString = Math.floor(played / 60) + ":" + ("0" + (played % 60)).slice(-2);
+		const lengthString = Math.floor(totalDuration / 60) + ":" + ("0" + (totalDuration % 60)).slice(-2);
+
+		const description = song.description;
 
 		const embed = new MessageEmbed()
 			.setTitle(`Now playing ${song.title}`)
 			.setDescription(
-				`${song.description.substring(0, 200)}...\n\n` +
-				`[${playBar}] %${Math.floor(played / totalDuration * 100)}\n` +
-				`${totalDuration - played} seconds left out of ${totalDuration}`
+				`${description.length > 5000 ? description.substring(0, 4997) + "..." : description}\n\n` +
+				`${playedString} |${playBar}| ${lengthString}\n`
 			)
 			.addFields(
 				{
@@ -68,14 +72,18 @@ export default {
 
 		const played = Math.floor(connection._state.subscription.player._state.playbackDuration / 1000);
 		const totalDuration = +song.metadata.length_seconds;
-		const playBar = "\u2588".repeat(Math.floor(played / totalDuration * 25) || 1) + "\u2591".repeat(25 - Math.floor(played / totalDuration * 25) || 1);
+		const playBar = "\u2588".repeat(Math.floor(played / totalDuration * 20) || 1) + "\u2591".repeat(20 - Math.floor(played / totalDuration * 20) || 1);
+
+		const playedString = Math.floor(played / 60) + ":" + ("0" + (played % 60)).slice(-2);
+		const lengthString = Math.floor(totalDuration / 60) + ":" + ("0" + (totalDuration % 60)).slice(-2);
+
+		const description = song.description;
 
 		const embed = new MessageEmbed()
 			.setTitle(`Now playing ${song.title}`)
 			.setDescription(
-				`${song.description.substring(0, 200)}...\n\n` +
-				`[${playBar}] %${Math.floor(played / totalDuration * 100)}\n` +
-				`${totalDuration - played} seconds left out of ${totalDuration}`
+				`${description.length > 5000 ? description.substring(0, 4997) + "..." : description}\n\n` +
+				`${playedString} |${playBar}| ${lengthString}\n`
 			)
 			.addFields(
 				{
