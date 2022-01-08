@@ -4,9 +4,15 @@ Happy Tunes is the only music bot your Discord server will ever need! Quickly an
 
 | Command   | Functionality          | Parameters                      |
 |-----------|------------------------|---------------------------------|
+| `/github` | Link to the repo       | None                            |
 | `/join`   | Join your voice chat   | None                            |
 | `/leave`  | Leave your voice chat  | None                            |
+| `/lyrics` | Searches song lyrics   | None                            |
+| `/np`     | Info on current song   | None                            |
 | `/pause`  | Pause the current song | None                            |
-| `/resume` | Resume a paused song   | None                            |
 | `/ping`   | Check bot latency      | None                            |
 | `/play`   | Search a song and play | search - The song to search for |
+| `/queue`. | Shows songs in queue   | None                            |
+| `/resume` | Resume a paused song   | None                            |
+| `/search` | Get a list of songs    | search - Criteria to search for |
+| `/skip`   | Skip to a song in queue| *skipto - song to skip to       |
