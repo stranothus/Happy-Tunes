@@ -37,7 +37,7 @@ export default {
 		const embed = new MessageEmbed()
 			.setTitle(`Now playing ${song.title}`)
 			.setDescription(
-				`${description.length > 5000 ? description.substring(0, 4997) + "..." : description}\n\n` +
+				`${description.length > 4000 ? description.substring(0, 3997) + "..." : description}\n\n` +
 				`${playedString} |${playBar}| ${lengthString}\n`
 			)
 			.addFields(
@@ -82,7 +82,7 @@ export default {
 		const embed = new MessageEmbed()
 			.setTitle(`Now playing ${song.title}`)
 			.setDescription(
-				`${description.length > 5000 ? description.substring(0, 4997) + "..." : description}\n\n` +
+				`${description.length > 4000 ? description.substring(0, 3997) + "..." : description}\n\n` +
 				`${playedString} |${playBar}| ${lengthString}\n`
 			)
 			.addFields(

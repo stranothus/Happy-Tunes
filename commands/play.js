@@ -84,7 +84,7 @@ export default {
 			return;
 		}
 
-		const searchFor = interaction.options.getString("search");
+		const searchFor = args[0];
 
 		if(!searchFor) {
 			msg.channel.send("No search criteria provided");

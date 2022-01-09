@@ -96,7 +96,7 @@ export default {
 		const embed = new MessageEmbed()
 			.setTitle(`Discovered lyrics for ${song.title}`)
 			.setURL(`https://${link}`)
-			.setDescription(text.substring(0, 6000))
+			.setDescription(text.substring(0, 4000))
 			.setThumbnail(song.thumbnail.url);
 
 		msg.channel.send({ embeds: [embed] });
