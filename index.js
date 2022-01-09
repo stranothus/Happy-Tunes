@@ -1,6 +1,7 @@
 import discord from "discord.js";
 import dotenv from "dotenv";
 import dirFlat from "./utils/dirFlat.js";
+import express from "express";
 
 dotenv.config();
 
@@ -27,3 +28,11 @@ Promise.all(dirFlat("./events").map(async v => {
 })).then(events => events.forEach(event => client[event.type](event.name, event.execute)));
 
 client.login(process.env.TOKEN);
+
+const app = express();
+
+app.use((req, res) => {
+	res.send("Server running");
+});
+
+app.listen(3030);
