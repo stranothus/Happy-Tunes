@@ -35,6 +35,8 @@ export default {
 		} else {
 			if(msg.content.startsWith(prefix)) {
 				msg.content = msg.content.replace(new RegExp("^" + prefix), "");
+			} else if(msg.content.startsWith(`<@!${msg.client.user.id}>`)) {
+				msg.content = msg.content.replace(new RegExp(`^<@!${msg.client.user.id}>\\s*`), "");
 			} else {
 				return;
 			}
