@@ -46,7 +46,7 @@ export default {
 		}
 
 		interaction.editReply(`Playing https://www.youtube.com/watch?v=${results.videos[0].id}`);
-
+		
 		interaction.client.servers[interaction.guild.id] = [results.videos[0].id];
 
 		const video = ytdl("https://www.youtube.com/watch?v=" + results.videos[0].id, {
@@ -61,11 +61,21 @@ export default {
 		player.on('error', console.error);
 
 		player.on(AudioPlayerStatus.Idle, () => {
-			interaction.client.servers[interaction.guild.id].shift();
-
 			const songs = interaction.client.servers[interaction.guild.id];
 
+			if(songs.filter(v => v.match(/loop/i)).length) {
+				interaction.client.servers[interaction.guild.id].push(songs[0]);
+			}
+
+			interaction.client.servers[interaction.guild.id].shift();
+
 			if(songs.length) {
+				if(songs[0].match(/loop/i)) {
+					interaction.client.servers[interaction.guild.id].push(songs[0]);
+					interaction.client.servers[interaction.guild.id].shift();
+
+					if(songs.length < 2) return;
+				}
 				interaction.channel.send(`Playing https://www.youtube.com/watch?v=${songs[0]}`);
 				const video = ytdl("https://www.youtube.com/watch?v=" + songs[0], {
 					filter: "audioonly",
@@ -120,11 +130,22 @@ export default {
 		player.on('error', console.error);
 
 		player.on(AudioPlayerStatus.Idle, () => {
-			msg.client.servers[msg.guild.id].shift();
-			
 			const songs = msg.client.servers[msg.guild.id];
 
+			if(songs.filter(v => v.match(/loop/i)).length) {
+				msg.client.servers[msg.guild.id].push(songs[0]);
+			}
+
+			msg.client.servers[msg.guild.id].shift();
+
 			if(songs.length) {
+				if(songs[0].match(/loop/i)) {
+					msg.client.servers[msg.guild.id].push(songs[0]);
+					msg.client.servers[msg.guild.id].shift();
+
+					if(songs.length < 2) return;
+				}
+
 				msg.channel.send(`Playing https://www.youtube.com/watch?v=${songs[0]}`);
 				const video = ytdl("https://www.youtube.com/watch?v=" + songs[0], {
 					filter: "audioonly",

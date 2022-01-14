@@ -31,10 +31,17 @@ export default {
 		}
 
 		const remove = +interaction.options.getInteger("toremove");
+		const loop = !!songs.filter(v => v.match(/loop/i)).length;
 
-		if(!songs[remove]) {
+		if(!songs[remove + (loop ? 1 : 0)]) {
 			interaction.reply("The queue is not that big");
 			return;
+		}
+
+		if(loop) {
+			const index = songs.map((v, i) => v.match(/loop/i) ? i : false).filter(v => v)[0];
+
+			if(removed >= index) remove++;
 		}
 
 		const removed = songs[remove];
@@ -59,15 +66,22 @@ export default {
 		}
 		
 		const remove = +args[0];
+		const loop = !!songs.filter(v => v.match(/loop/i)).length;
 
 		if(!remove) {
 			msg.channel.send("No item index provided for removal");
 			return;
 		}
 
-		if(!songs[remove]) {
+		if(!songs[remove + (loop ? 1 : 0)]) {
 			msg.channel.send("The queue is not that big");
 			return;
+		}
+
+		if(loop) {
+			const index = songs.map((v, i) => v.match(/loop/i) ? i : false).filter(v => v)[0];
+
+			if(removed >= index) remove++;
 		}
 
 		const removed = songs[remove];

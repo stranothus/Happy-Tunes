@@ -18,7 +18,7 @@ export default {
 			return;
 		}
 
-		const songs = interaction.client.servers[interaction.guild.id];
+		const songs = interaction.client.servers[interaction.guild.id].filter(v => !v.match(/loop/i));
 
 		if(!songs.length) {
 			interaction.reply("No songs currently playing or in queue");
@@ -47,7 +47,7 @@ export default {
 			return;
 		}
 
-		const songs = msg.client.servers[msg.guild.id];
+		const songs = msg.client.servers[msg.guild.id].filter(v => !v.match(/loop/i));
 
 		if(!songs.length) {
 			msg.channel.send("No songs currently playing or in queue");

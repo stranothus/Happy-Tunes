@@ -23,7 +23,7 @@ export default {
 			return;
 		}
 
-		const songs = interaction.client.servers[interaction.guild.id];
+		const songs = interaction.client.servers[interaction.guild.id].filter(v => !v.match(/loop/i));
 		const player = connection._state.subscription.player;
 		const skipTo = interaction.options.getString("skipto") || 1;
 
@@ -33,11 +33,15 @@ export default {
 		}
 
 		const oldSong = songs[0];
-		const newSong = skipTo >= songs.length ? undefined : songs[skipTo];
+		let newSong = skipTo >= songs.length ? undefined : songs[skipTo];
+		const loop = !!interaction.client.servers[interaction.guild.id].filter(v => v.match(/loop/i)).length;
 
 		for(let i = 0; i < skipTo && interaction.client.servers[interaction.guild.id].length; i++) {
+			if(loop) interaction.client.servers[interaction.guild.id].push(interaction.client.servers[interaction.guild.id][0]);
 			interaction.client.servers[interaction.guild.id].shift();
 		}
+
+		if(loop) newSong = interaction.client.servers[interaction.guild.id][0];
 
 		if(!newSong) {
 			interaction.reply(`Skipped https://www.youtube.com/watch?v=${oldSong}. No more songs to play`);
@@ -62,7 +66,7 @@ export default {
 			return;
 		}
 
-		const songs = msg.client.servers[msg.guild.id];
+		const songs = msg.client.servers[msg.guild.id].filter(v => !v.match(/loop/i));
 		const player = connection._state.subscription.player;
 		const skipTo = args[0] || 1;
 
@@ -72,11 +76,15 @@ export default {
 		}
 
 		const oldSong = songs[0];
-		const newSong = skipTo >= songs.length ? undefined : songs[skipTo];
+		let newSong = skipTo >= songs.length ? undefined : songs[skipTo];
+		const loop = !!msg.client.servers[msg.guild.id].filter(v => v.match(/loop/i)).length;
 
 		for(let i = 0; i < skipTo && msg.client.servers[msg.guild.id].length; i++) {
+			if(loop) msg.client.servers[msg.guild.id].push(msg.client.servers[msg.guild.id][0]);
 			msg.client.servers[msg.guild.id].shift();
 		}
+
+		if(loop) newSong = interaction.client.servers[interaction.guild.id][0];
 
 		if(!newSong) {
 			msg.channel.send(`Skipped https://www.youtube.com/watch?v=${oldSong}. No more songs to play`);
