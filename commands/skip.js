@@ -53,6 +53,7 @@ export default {
 
 		const video = ytdl("https://www.youtube.com/watch?v=" + newSong, {
 			filter: "audioonly",
+			quality: "highestaudio"
 		});
 		const resource = createAudioResource(video);
 
@@ -96,6 +97,7 @@ export default {
 
 		const video = ytdl("https://www.youtube.com/watch?v=" + newSong, {
 			filter: "audioonly",
+			quality: "highestaudio"
 		});
 		const resource = createAudioResource(video);
 

@@ -51,6 +51,7 @@ export default {
 
 		const video = ytdl("https://www.youtube.com/watch?v=" + results.videos[0].id, {
 			filter: "audioonly",
+			quality: "highestaudio"
 		});
 		const player = createAudioPlayer();
 		const resource = createAudioResource(video);
@@ -79,6 +80,7 @@ export default {
 				interaction.channel.send(`Playing https://www.youtube.com/watch?v=${songs[0]}`);
 				const video = ytdl("https://www.youtube.com/watch?v=" + songs[0], {
 					filter: "audioonly",
+					quality: "highestaudio"
 				});
 				const resource = createAudioResource(video);
 
@@ -120,6 +122,7 @@ export default {
 
 		const video = ytdl("https://www.youtube.com/watch?v=" + results.videos[0].id, {
 			filter: "audioonly",
+			quality: "highestaudio"
 		});
 		const player = createAudioPlayer();
 		const resource = createAudioResource(video);
@@ -149,6 +152,7 @@ export default {
 				msg.channel.send(`Playing https://www.youtube.com/watch?v=${songs[0]}`);
 				const video = ytdl("https://www.youtube.com/watch?v=" + songs[0], {
 					filter: "audioonly",
+					quality: "highestaudio"
 				});
 				const resource = createAudioResource(video);
 
