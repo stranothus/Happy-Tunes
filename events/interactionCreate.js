@@ -1,7 +1,11 @@
+import { Permissions } from "discord.js";
+
 export default {
 	type: "on",
 	name: "interactionCreate",
 	execute: interaction => {
+		if(!interaction.guild.me.permissions.has(Permissions.FLAGS.SEND_MESSAGES && Permissions.FLAGS.EMBED_LINKS && Permissions.FLAGS.CONNECT && Permissions.FLAGS.SPEAK)) return;
+
 		if(interaction.isSelectMenu()) {
 			if(interaction.user.bot) return;
 
