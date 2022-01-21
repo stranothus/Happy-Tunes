@@ -53,7 +53,9 @@ export default {
 
 		const video = ytdl("https://www.youtube.com/watch?v=" + newSong, {
 			filter: "audioonly",
-			quality: "highestaudio"
+			quality: "highestaudio",
+			highWaterMark: 1 << 25,
+			requestOptions: { headers: { cookie: process.env['COOKIE'] }}
 		});
 		const resource = createAudioResource(video);
 
@@ -97,7 +99,9 @@ export default {
 
 		const video = ytdl("https://www.youtube.com/watch?v=" + newSong, {
 			filter: "audioonly",
-			quality: "highestaudio"
+			quality: "highestaudio",
+			highWaterMark: 1 << 25,
+			requestOptions: { headers: { cookie: process.env['COOKIE'] }}
 		});
 		const resource = createAudioResource(video);
 

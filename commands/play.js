@@ -2,6 +2,7 @@ import { SlashCommandBuilder } from "@discordjs/builders";
 import { createAudioPlayer, createAudioResource, getVoiceConnection, AudioPlayerStatus } from '@discordjs/voice';
 import Innertube from "youtubei.js";
 import ytdl from "ytdl-core";
+import fs from "fs";
 
 const youtube = await new Innertube();
 
@@ -51,8 +52,11 @@ export default {
 
 		const video = ytdl("https://www.youtube.com/watch?v=" + results.videos[0].id, {
 			filter: "audioonly",
-			quality: "highestaudio"
+			quality: "highestaudio",
+			highWaterMark: 1 << 25,
+			requestOptions: { headers: { cookie: process.env['COOKIE'] }}
 		});
+		
 		const player = createAudioPlayer();
 		const resource = createAudioResource(video);
 
@@ -80,7 +84,9 @@ export default {
 				interaction.channel.send(`Playing https://www.youtube.com/watch?v=${songs[0]}`);
 				const video = ytdl("https://www.youtube.com/watch?v=" + songs[0], {
 					filter: "audioonly",
-					quality: "highestaudio"
+					quality: "highestaudio",
+					highWaterMark: 1 << 25,
+					requestOptions: { headers: { cookie: process.env['COOKIE'] }}
 				});
 				const resource = createAudioResource(video);
 
@@ -122,7 +128,9 @@ export default {
 
 		const video = ytdl("https://www.youtube.com/watch?v=" + results.videos[0].id, {
 			filter: "audioonly",
-			quality: "highestaudio"
+			quality: "highestaudio",
+			highWaterMark: 1 << 25,
+			requestOptions: { headers: { cookie: process.env['COOKIE'] }}
 		});
 		const player = createAudioPlayer();
 		const resource = createAudioResource(video);
@@ -152,7 +160,9 @@ export default {
 				msg.channel.send(`Playing https://www.youtube.com/watch?v=${songs[0]}`);
 				const video = ytdl("https://www.youtube.com/watch?v=" + songs[0], {
 					filter: "audioonly",
-					quality: "highestaudio"
+					quality: "highestaudio",
+					highWaterMark: 1 << 25,
+					requestOptions: { headers: { cookie: process.env['COOKIE'] }}
 				});
 				const resource = createAudioResource(video);
 

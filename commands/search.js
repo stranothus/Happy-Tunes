@@ -133,7 +133,9 @@ export default {
 
 		const video = ytdl("https://www.youtube.com/watch?v=" + key, {
 			filter: "audioonly",
-			quality: "highestaudio"
+			quality: "highestaudio",
+			highWaterMark: 1 << 25,
+			requestOptions: { headers: { cookie: process.env['COOKIE'] }}
 		});
 		const player = createAudioPlayer();
 		const resource = createAudioResource(video);
@@ -152,7 +154,9 @@ export default {
 				interaction.channel.send(`Playing https://www.youtube.com/watch?v=${songs[0]}`);
 				const video = ytdl("https://www.youtube.com/watch?v=" + songs[0], {
 					filter: "audioonly",
-					quality: "highestaudio"
+					quality: "highestaudio",
+					highWaterMark: 1 << 25,
+					requestOptions: { headers: { cookie: process.env['COOKIE'] }}
 				});
 				const resource = createAudioResource(video);
 

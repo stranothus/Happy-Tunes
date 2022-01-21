@@ -1,7 +1,7 @@
 import { Permissions } from "discord.js";
 import dirFlat from "../utils/dirFlat.js";
 
-const prefix = "!";
+const prefix = "-";
 
 const commands = Promise.all(dirFlat("./commands").map(async v => {
 	let imported = await import("../" + v);
@@ -27,6 +27,8 @@ export default {
 
 			let index = (await commands).findIndex(v => v.data.name === command);
 				index = (await commands)[index];
+			
+			if(!index || !index.executeText) return;
 
 			if(!index.DMs) {
 				msg.channel.send("This command cannot be used outside of servers :(");

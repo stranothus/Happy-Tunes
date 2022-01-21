@@ -41,7 +41,7 @@ export default {
 		if(loop) {
 			const index = songs.map((v, i) => v.match(/loop/i) ? i : false).filter(v => v)[0];
 
-			if(removed >= index) remove++;
+			if(remove >= index) remove++;
 		}
 
 		const removed = songs[remove];
