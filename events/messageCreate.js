@@ -50,6 +50,8 @@ export default {
 
 			let index = (await commands).findIndex(v => v.data.name === command);
 				index = (await commands)[index];
+			
+			if(!index || !index.executeText) return;
 
 			index.executeText(msg, args);
 		}
