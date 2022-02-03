@@ -1,22 +1,21 @@
 import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v9";
 import dirFlat from "../utils/dirFlat.js";
-import discord from "discord.js";
-
-const commands = await Promise.all(dirFlat("./commands").map(async v => {
-	let imported = await import("../" + v);
-
-	return {
-		command: v.replace(/\.[^\.]+$/, ""),
-		file: v,
-		...imported.default
-	};
-}));
 
 export default {
 	type: "on",
 	name: "guildCreate",
-	execute: guild => {
+	execute: async guild => {
+		const commands = await Promise.all(dirFlat("./commands").map(async v => {
+			let imported = await import("../" + v);
+
+			return {
+				command: v.replace(/\.[^\.]+$/, ""),
+				file: v,
+				...imported.default
+			};
+		}));
+
 		const rest = new REST({ version: '9' }).setToken(process.env.TOKEN);
 
 		const server = commands.filter(v => !v.DMs);
