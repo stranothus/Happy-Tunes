@@ -59,7 +59,10 @@ export default {
 					.setTitle(v.title)
 					.setURL(v.url)
 					.setDescription(v.description.substring(0, 100))
-					.setAuthor(v.author)
+					.setAuthor({
+						name: v.author,
+						url: v.channel_url
+					})
 					.setThumbnail(v.metadata.thumbnails[0].url)
 			),
 			components: [row]
@@ -106,7 +109,10 @@ export default {
 					.setTitle(v.title)
 					.setURL(v.url)
 					.setDescription(v.description.substring(0, 100))
-					.setAuthor(v.author)
+					.setAuthor({
+						name: v.author,
+						url: v.channel_url
+					})
 					.setThumbnail(v.metadata.thumbnails[0].url)
 			),
 			components: [row]
