@@ -31,7 +31,7 @@ export default {
 			return;
 		}
 
-		await interaction.deferReply();
+		interaction.deferReply();
 
 		const results = await youtube.search(searchFor);
 
