@@ -76,7 +76,7 @@ export default {
 			return;
 		}
 
-		const searchFor = interaction.options.getString("search");
+		const searchFor = args.join(" ");
 
 		if(!searchFor) {
 			msg.channel.send("No search criteria provided");
@@ -119,7 +119,8 @@ export default {
 		});
 	},
 	selectMenu: async function(interaction) {
-		const connnection = getVoiceConnection(interaction.guild.id);
+		const guildId = interaction.guild.id;
+		const connnection = getVoiceConnection(guildId);
 
 		if(!connnection) return;
 
@@ -127,15 +128,15 @@ export default {
 
 		const key = interaction.values[0];
 
-		if(interaction.client.servers[interaction.guild.id] && interaction.client.servers[interaction.guild.id].length) {
-			interaction.client.servers[interaction.guild.id].push(key);
+		if(interaction.client.servers[guildId] && interaction.client.servers[guildId].length) {
+			interaction.client.servers[guildId].push(key);
 			interaction.channel.send(`Queued https://www.youtube.com/watch?v=${key}`);
 			return;
 		}
 
 		interaction.channel.send(`Playing https://www.youtube.com/watch?v=${key}`);
 
-		interaction.client.servers[interaction.guild.id] = [key];
+		interaction.client.servers[guildId] = [key];
 
 		const video = ytdl("https://www.youtube.com/watch?v=" + key, {
 			filter: "audioonly",
@@ -152,9 +153,9 @@ export default {
 		player.on('error', console.error);
 
 		player.on(AudioPlayerStatus.Idle, () => {
-			interaction.client.servers[interaction.guild.id].shift();
+			interaction.client.servers[guildId].shift();
 
-			const songs = interaction.client.servers[interaction.guild.id];
+			const songs = interaction.client.servers[guildId];
 
 			if(songs.length) {
 				interaction.channel.send(`Playing https://www.youtube.com/watch?v=${songs[0]}`);

@@ -17,7 +17,8 @@ export default {
 		),
 	DMs: false,
 	execute: async function(interaction) {
-		const connection = getVoiceConnection(interaction.guild.id);
+		const guildId = interaction.guild.id;
+		const connection = getVoiceConnection(guildId);
 
 		if(!connection) {
 			interaction.reply("Not connected to any voice chat");
@@ -39,18 +40,20 @@ export default {
 			interaction.editReply("No videos found");
 			return;
 		}
+
+		const id = results.videos[0].id;
 		
-		if(interaction.client.servers[interaction.guild.id] && interaction.client.servers[interaction.guild.id].length) {
-			interaction.client.servers[interaction.guild.id].push(results.videos[0].id);
-			interaction.editReply(`Queued https://www.youtube.com/watch?v=${results.videos[0].id}`);
+		if(interaction.client.servers[guildId] && interaction.client.servers[guildId].length) {
+			interaction.client.servers[guildId].push(id);
+			interaction.editReply(`Queued https://www.youtube.com/watch?v=${id}`);
 			return;
 		}
 
-		interaction.editReply(`Playing https://www.youtube.com/watch?v=${results.videos[0].id}`);
+		interaction.editReply(`Playing https://www.youtube.com/watch?v=${id}`);
 		
-		interaction.client.servers[interaction.guild.id] = [results.videos[0].id];
+		interaction.client.servers[guildId] = [id];
 
-		const video = ytdl("https://www.youtube.com/watch?v=" + results.videos[0].id, {
+		const video = ytdl("https://www.youtube.com/watch?v=" + id, {
 			filter: "audioonly",
 			quality: "highestaudio",
 			highWaterMark: 1 << 25,
@@ -66,18 +69,18 @@ export default {
 		player.on('error', console.error);
 
 		player.on(AudioPlayerStatus.Idle, () => {
-			const songs = interaction.client.servers[interaction.guild.id];
+			const songs = interaction.client.servers[guildId];
 
 			if(songs.filter(v => v.match(/loop/i)).length) {
-				interaction.client.servers[interaction.guild.id].push(songs[0]);
+				interaction.client.servers[guildId].push(songs[0]);
 			}
 
-			interaction.client.servers[interaction.guild.id].shift();
+			interaction.client.servers[guildId].shift();
 
 			if(songs.length) {
 				if(songs[0].match(/loop/i)) {
-					interaction.client.servers[interaction.guild.id].push(songs[0]);
-					interaction.client.servers[interaction.guild.id].shift();
+					interaction.client.servers[guildId].push(songs[0]);
+					interaction.client.servers[guildId].shift();
 
 					if(songs.length < 2) return;
 				}
@@ -95,6 +98,7 @@ export default {
 		});
 	},
 	executeText: async function(msg, args) {
+		const guildId = msg.guild.id;
 		const connection = getVoiceConnection(msg.guild.id);
 
 		if(!connection) {
@@ -102,7 +106,7 @@ export default {
 			return;
 		}
 
-		const searchFor = args[0];
+		const searchFor = args.join(" ");
 
 		if(!searchFor) {
 			msg.channel.send("No search criteria provided");
@@ -116,17 +120,19 @@ export default {
 			return;
 		}
 
-		if(msg.client.servers[msg.guild.id] && msg.client.servers[msg.guild.id].length) {
-			msg.client.servers[msg.guild.id].push(results.videos[0].id);
-			msg.channel.send(`Queued https://www.youtube.com/watch?v=${results.videos[0].id}`);
+		const id = results.videos[0].id;
+		
+		if(msg.client.servers[guildId] && msg.client.servers[guildId].length) {
+			msg.client.servers[guildId].push(id);
+			msg.channel.send(`Queued https://www.youtube.com/watch?v=${id}`);
 			return;
 		}
 
-		msg.channel.send(`Playing https://www.youtube.com/watch?v=${results.videos[0].id}`);
+		msg.channel.send(`Playing https://www.youtube.com/watch?v=${id}`);
 
-		msg.client.servers[msg.guild.id] = [results.videos[0].id];
+		msg.client.servers[guildId] = [id];
 
-		const video = ytdl("https://www.youtube.com/watch?v=" + results.videos[0].id, {
+		const video = ytdl("https://www.youtube.com/watch?v=" + id, {
 			filter: "audioonly",
 			quality: "highestaudio",
 			highWaterMark: 1 << 25,
@@ -141,18 +147,18 @@ export default {
 		player.on('error', console.error);
 
 		player.on(AudioPlayerStatus.Idle, () => {
-			const songs = msg.client.servers[msg.guild.id];
+			const songs = msg.client.servers[guildId];
 
 			if(songs.filter(v => v.match(/loop/i)).length) {
-				msg.client.servers[msg.guild.id].push(songs[0]);
+				msg.client.servers[guildId].push(songs[0]);
 			}
 
-			msg.client.servers[msg.guild.id].shift();
+			msg.client.servers[guildId].shift();
 
 			if(songs.length) {
 				if(songs[0].match(/loop/i)) {
-					msg.client.servers[msg.guild.id].push(songs[0]);
-					msg.client.servers[msg.guild.id].shift();
+					msg.client.servers[guildId].push(songs[0]);
+					msg.client.servers[guildId].shift();
 
 					if(songs.length < 2) return;
 				}
