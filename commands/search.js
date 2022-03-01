@@ -3,6 +3,7 @@ import { SlashCommandBuilder } from "@discordjs/builders";
 import { createAudioPlayer, createAudioResource, getVoiceConnection, AudioPlayerStatus } from '@discordjs/voice';
 import Innertube from "youtubei.js";
 import ytdl from "ytdl-core";
+import playSong from "../utils/playSong.js";
 
 const youtube = await new Innertube();
 
@@ -120,55 +121,24 @@ export default {
 	},
 	selectMenu: async function(interaction) {
 		const guildId = interaction.guild.id;
+		const client = interaction.client;
+		const channel = interaction.channel;
 		const connnection = getVoiceConnection(guildId);
-
+		
 		if(!connnection) return;
 
 		interaction.update({ content: 'A song was selected!', components: [], embeds: [] });
 
-		const key = interaction.values[0];
+		const id = interaction.values[0];
 
-		if(interaction.client.servers[guildId] && interaction.client.servers[guildId].length) {
-			interaction.client.servers[guildId].push(key);
-			interaction.channel.send(`Queued https://www.youtube.com/watch?v=${key}`);
+		if(client.servers[guildId] && client.servers[guildId].length) {
+			client.servers[guildId].push(id);
+			await channel.send(`Queued https://www.youtube.com/watch?v=${id}`);
 			return;
 		}
 
-		interaction.channel.send(`Playing https://www.youtube.com/watch?v=${key}`);
-
-		interaction.client.servers[guildId] = [key];
-
-		const video = ytdl("https://www.youtube.com/watch?v=" + key, {
-			filter: "audioonly",
-			quality: "highestaudio",
-			highWaterMark: 1 << 25,
-			requestOptions: { headers: { cookie: process.env['COOKIE'] }}
-		});
-		const player = createAudioPlayer();
-		const resource = createAudioResource(video);
-
-		connnection.subscribe(player);
-		player.play(resource);
-
-		player.on('error', console.error);
-
-		player.on(AudioPlayerStatus.Idle, () => {
-			interaction.client.servers[guildId].shift();
-
-			const songs = interaction.client.servers[guildId];
-
-			if(songs.length) {
-				interaction.channel.send(`Playing https://www.youtube.com/watch?v=${songs[0]}`);
-				const video = ytdl("https://www.youtube.com/watch?v=" + songs[0], {
-					filter: "audioonly",
-					quality: "highestaudio",
-					highWaterMark: 1 << 25,
-					requestOptions: { headers: { cookie: process.env['COOKIE'] }}
-				});
-				const resource = createAudioResource(video);
-
-				player.play(resource);
-			}
-		});
+		await channel.send(`Playing https://www.youtube.com/watch?v=${id}`);
+		
+		await playSong(id, client, guildId, channel);
 	}
 }
