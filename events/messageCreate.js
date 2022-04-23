@@ -17,6 +17,7 @@ export default {
 	type: "on",
 	name: "messageCreate",
 	execute: async msg => {
+		if(!msg.guild) return;
 		if(!msg.guild.me.permissions.has(Permissions.FLAGS.SEND_MESSAGES && Permissions.FLAGS.EMBED_LINKS && Permissions.FLAGS.CONNECT && Permissions.FLAGS.SPEAK)) return;
 		if(msg.author.bot) return;
 		if(!msg.guild) {
