@@ -12,20 +12,21 @@ export default {
 	DMs: false,
 	execute: async function(interaction) {
 		const connection = getVoiceConnection(interaction.guild.id);
+		const player = connection?.state_?.subscription?.player;
 
 		if(!connection) {
 			interaction.reply("Not connected to any voice chat");
 			return;
 		}
 
-		if(!interaction.client.servers[interaction.guild.id][0]) {
+		if(!interaction.client.servers[interaction.guild.id][0] || !player) {
 			interaction.reply("No songs currently playing");
 			return;
 		}
 
 		const song = await youtube.getDetails(interaction.client.servers[interaction.guild.id][0]);
 
-		const played = Math.floor(connection._state.subscription.player._state.playbackDuration / 1000);
+		const played = Math.floor(player._state.playbackDuration / 1000);
 		const totalDuration = +song.metadata.length_seconds;
 		const playBar = "\u2588".repeat(Math.floor(played / totalDuration * 20) || 1) + "\u2591".repeat(20 - Math.floor(played / totalDuration * 20) || 1);
 
@@ -57,20 +58,21 @@ export default {
 	},
 	executeText: async function(msg, args) {
 		const connection = getVoiceConnection(msg.guild.id);
+		const player = connection?.state_?.subscription?.player;
 
 		if(!connection) {
 			msg.channel.send("Not connected to any voice chat");
 			return;
 		}
 
-		if(!msg.client.servers[msg.guild.id][0]) {
+		if(!msg.client.servers[msg.guild.id][0] || !player) {
 			msg.channel.send("No songs currently playing");
 			return;
 		}
 
 		const song = await youtube.getDetails(msg.client.servers[msg.guild.id][0]);
 
-		const played = Math.floor(connection._state.subscription.player._state.playbackDuration / 1000);
+		const played = Math.floor(player._state.playbackDuration / 1000);
 		const totalDuration = +song.metadata.length_seconds;
 		const playBar = "\u2588".repeat(Math.floor(played / totalDuration * 20) || 1) + "\u2591".repeat(20 - Math.floor(played / totalDuration * 20) || 1);
 

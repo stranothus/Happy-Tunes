@@ -61,8 +61,8 @@ export default {
 					.setURL(v.url)
 					.setDescription(v.description.substring(0, 100))
 					.setAuthor({
-						name: v.author,
-						url: v.channel_url
+						name: v.channel.author || "No author",
+						url: v.channel.channel_url || "https://youtube.com"
 					})
 					.setThumbnail(v.metadata.thumbnails[0].url)
 			),
@@ -111,8 +111,8 @@ export default {
 					.setURL(v.url)
 					.setDescription(v.description.substring(0, 100))
 					.setAuthor({
-						name: v.author,
-						url: v.channel_url
+						name: v.channel.author || "No author",
+						url: v.channel.channel_url || "https://youtube.com"
 					})
 					.setThumbnail(v.metadata.thumbnails[0].url)
 			),

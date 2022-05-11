@@ -24,7 +24,7 @@ export default {
 		}
 
 		const songs = interaction.client.servers[interaction.guild.id].filter(v => !v.match(/loop/i));
-		const player = connection._state.subscription.player;
+		const player = connection._state.subscription?.player;
 		const skipTo = interaction.options.getString("skipto") || 1;
 
 		if(!player || !songs || !songs.length) {
@@ -45,7 +45,7 @@ export default {
 
 		if(!newSong) {
 			interaction.reply(`Skipped https://www.youtube.com/watch?v=${oldSong}. No more songs to play`);
-			player.stop();
+			connection._state.subscription.unsubscribe();
 			return;
 		}
 
@@ -70,7 +70,7 @@ export default {
 		}
 
 		const songs = msg.client.servers[msg.guild.id].filter(v => !v.match(/loop/i));
-		const player = connection._state.subscription.player;
+		const player = connection._state.subscription?.player;
 		const skipTo = args[0] || 1;
 
 		if(!player || !songs || !songs.length) {
@@ -91,7 +91,7 @@ export default {
 
 		if(!newSong) {
 			msg.channel.send(`Skipped https://www.youtube.com/watch?v=${oldSong}. No more songs to play`);
-			player.stop();
+			connection._state.subscription.unsubscribe();
 			return;
 		}
 
