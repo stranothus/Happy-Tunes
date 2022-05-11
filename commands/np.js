@@ -12,7 +12,7 @@ export default {
 	DMs: false,
 	execute: async function(interaction) {
 		const connection = getVoiceConnection(interaction.guild.id);
-		const player = connection?.state_?.subscription?.player;
+		const player = connection?._state?.subscription?.player;
 
 		if(!connection) {
 			interaction.reply("Not connected to any voice chat");
@@ -58,7 +58,7 @@ export default {
 	},
 	executeText: async function(msg, args) {
 		const connection = getVoiceConnection(msg.guild.id);
-		const player = connection?.state_?.subscription?.player;
+		const player = connection?._state?.subscription?.player;
 
 		if(!connection) {
 			msg.channel.send("Not connected to any voice chat");
