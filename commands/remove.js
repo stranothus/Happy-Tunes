@@ -30,7 +30,7 @@ export default {
 			return;
 		}
 
-		const remove = +interaction.options.getInteger("toremove");
+		let remove = +interaction.options.getInteger("toremove");
 		const loop = !!songs.filter(v => v.match(/loop/i)).length;
 
 		if(!songs[remove + (loop ? 1 : 0)]) {

@@ -18,6 +18,11 @@ export default {
 			return;
 		}
 
+		if(!interaction.client.servers[interaction.guild.id]?.length) {
+			interaction.reply("No songs queued");
+			return;
+		}
+
 		const songs = interaction.client.servers[interaction.guild.id].filter(v => !v.match(/loop/i));
 
 		if(!songs.length) {
@@ -44,6 +49,11 @@ export default {
 
 		if(!connection) {
 			msg.channel.send("Not connected to any voice chat");
+			return;
+		}
+
+		if(!msg.client.servers[msg.guild.id]?.length) {
+			msg.channel.send("No songs queued");
 			return;
 		}
 

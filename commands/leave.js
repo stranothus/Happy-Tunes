@@ -15,6 +15,7 @@ export default {
 		}
 
 		connection.destroy();
+		interaction.client.servers[interaction.guild.id] = [];
 
 		interaction.reply(`Left <#${connection.joinConfig.channelId}>`);
 	},
@@ -27,6 +28,7 @@ export default {
 		}
 
 		connection.destroy();
+		msg.client.servers[msg.guild.id] = [];
 
 		msg.channel.send(`Left <#${connection.joinConfig.channelId}>`);
 	}

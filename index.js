@@ -27,7 +27,7 @@ Promise.all(dirFlat("./events").map(async v => {
 	};
 })).then(events => events.forEach(event => client[event.type](event.name, event.execute)));
 
-client.login(process.env.TOKEN);
+client.login(process.env.TOKEN).catch(console.log);
 
 const app = express();
 

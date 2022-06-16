@@ -51,6 +51,12 @@ async function playSong(id, client, guildId, channel) {
 			player.play(resource);
 		}
 	});
+
+	connection.on("disconnect", () => {
+		client.servers[guildId] = [];
+		player.unsubscribe();
+		connection.destroy();
+	});
 }
 
 export default playSong;

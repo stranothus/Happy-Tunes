@@ -19,7 +19,7 @@ export default {
 			return;
 		}
 
-		if(!interaction.client.servers[interaction.guild.id][0] || !player) {
+		if(!interaction.client.servers[interaction.guild.id]?.[0] || !player) {
 			interaction.reply("No songs currently playing");
 			return;
 		}
@@ -65,7 +65,7 @@ export default {
 			return;
 		}
 
-		if(!msg.client.servers[msg.guild.id][0] || !player) {
+		if(!msg.client.servers[msg.guild.id]?.[0] || !player) {
 			msg.channel.send("No songs currently playing");
 			return;
 		}
